@@ -1,0 +1,183 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "Resource Utilization Dashboard",
+    "title": "System Monitoring Dashboard",
+    "tags": ["cpu", "memory", "disk", "usage"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "type": "row",
+        "title": "System Resource Usage",
+        "panels": [
+          {
+            "type": "graph",
+            "title": "CPU Usage",
+            "datasource": "Prometheus",
+            "targets": [
+              {
+                "expr": "avg(rate(process_cpu_seconds_total[1m])) by (instance)",
+                "legendFormat": "{{instance}}",
+                "interval": "",
+                "refId": "A"
+              }
+            ],
+            "id": 1,
+            "xaxis": {
+              "mode": "time"
+            },
+            "yaxes": [
+              {
+                "format": "percent",
+                "label": "CPU Usage (%)"
+              },
+              {
+                "format": "short"
+              }
+            ],
+            "alert": {
+              "alertRuleTags": {},
+              "annotations": {},
+              "name": "High CPU Usage",
+              "noDataState": "OK",
+              "executionErrorState": "OK",
+              "for": "5m",
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [90],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": ["A"]
+                  },
+                  "reducer": {
+                    "type": "avg"
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "value": 90
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "graph",
+            "title": "Memory Usage",
+            "datasource": "Prometheus",
+            "targets": [
+              {
+                "expr": "100 - (avg(rate(node_memory_MemFree_bytes[5m])) by (instance) / avg(node_memory_MemTotal_bytes) by (instance)) * 100",
+                "legendFormat": "{{instance}}",
+                "interval": "",
+                "refId": "A"
+              }
+            ],
+            "id": 2,
+            "xaxis": {
+              "mode": "time"
+            },
+            "yaxes": [
+              {
+                "format": "percent",
+                "label": "Memory Usage (%)"
+              },
+              {
+                "format": "short"
+              }
+            ],
+            "alert": {
+              "alertRuleTags": {},
+              "annotations": {},
+              "name": "High Memory Usage",
+              "noDataState": "OK",
+              "executionErrorState": "OK",
+              "for": "5m",
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [85],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": ["A"]
+                  },
+                  "reducer": {
+                    "type": "avg"
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "value": 85
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "graph",
+            "title": "Disk Usage",
+            "datasource": "Prometheus",
+            "targets": [
+              {
+                "expr": "100 - (avg(rate(node_filesystem_free_bytes[5m])) by (instance, mountpoint) / avg(node_filesystem_size_bytes) by (instance, mountpoint)) * 100",
+                "legendFormat": "{{mountpoint}}",
+                "interval": "",
+                "refId": "A"
+              }
+            ],
+            "id": 3,
+            "xaxis": {
+              "mode": "time"
+            },
+            "yaxes": [
+              {
+                "format": "percent",
+                "label": "Disk Usage (%)"
+              },
+              {
+                "format": "short"
+              }
+            ],
+            "alert": {
+              "alertRuleTags": {},
+              "annotations": {},
+              "name": "High Disk Usage",
+              "noDataState": "OK",
+              "executionErrorState": "OK",
+              "for": "5m",
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [90],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": ["A"]
+                  },
+                  "reducer": {
+                    "type": "avg"
+                  },
+                  "thresholds": {
+                    "mode": "absolute",
+                    "value": 90
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
+
